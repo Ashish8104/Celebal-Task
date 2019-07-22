@@ -1,0 +1,69 @@
+# Databricks notebook source
+# DBTITLE 1,Window Partitioning in Pyspark
+
+rdd=sc.parallelize(range(4))
+
+# COMMAND ----------
+
+# DBTITLE 1,Getting the number of partitions being created
+rdd.getNumPartitions()
+
+# COMMAND ----------
+
+data = \
+  [("Thin", "Cell Phone", 6000),
+  ("Normal", "Tablet", 1500),
+  ("Mini", "Tablet", 5500),
+  ("Ultra thin", "Cell Phone", 5500),
+  ("Very thin", "Cell Phone", 6000),
+  ("Big", "Tablet", 2500),
+  ("Bendable", "Cell Phone", 3000),
+  ("Foldable", "Cell Phone", 3000),
+  ("Pro", "Tablet", 4500),
+  ("Pro2", "Tablet", 6500)]
+df = sqlContext.createDataFrame(data, ["product", "category", "revenue"])
+df.registerTempTable("productRevenue")
+
+# COMMAND ----------
+
+display(df)
+
+# COMMAND ----------
+
+# DBTITLE 1,creating windows
+from pyspark.sql.window import Window
+
+# COMMAND ----------
+
+# DBTITLE 1,Creating the partition by category 
+a = Window.partitionBy(df['category'])
+#a.rowsBetween(2500,6000)
+
+# COMMAND ----------
+
+# DBTITLE 1,creating the table
+dataFrame = df.createOrReplaceTempView('atble')
+
+# COMMAND ----------
+
+# MAGIC %sql select * from atble
+
+# COMMAND ----------
+
+
+dataframe = sqlContext.table('atble')
+
+dataframe.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,retrieving data according to the the partition data
+import pyspark.sql.functions as func
+
+#dataframe.select(df['revenue']).over(a)
+diff = (func.max(dataframe['revenue']).over(a) ) #- df['revenue'])
+
+# COMMAND ----------
+
+# DBTITLE 1,selecting only the desired data
+dataframe.select(diff.alias("partitiion data")).show()
