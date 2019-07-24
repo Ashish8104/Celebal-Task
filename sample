@@ -1,0 +1,562 @@
+# Databricks notebook source
+import pandas as pd
+from pyspark.sql import SparkSession
+sc = SparkSession.builder.appName("1 count with datess").getOrCreate()
+
+
+# COMMAND ----------
+
+list1=[]
+for i in range(1,21):
+  dates= '01/'+str(i)+'/2019'
+  list1.append(dates)
+  print(dates)
+
+dateList=['a','b','c','d','a','b','d','e','g','t','a','b','d','c','t','j','k','a','m','l']
+len(dateList)
+
+# COMMAND ----------
+
+
+data = {"user": dateList,
+         "date":list1}
+
+df=pd.DataFrame(data)
+df['date']= pd.to_datetime(df['date'])
+
+
+# COMMAND ----------
+
+# DBTITLE 1,test dataframe , we will create new one from this.
+from pyspark.sql import *
+#abc= [dateList, list]
+#dataframe = Row(user=dateList)
+#display(dataframe)
+
+dfs=sc.createDataFrame(df)
+dfs.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Getting mapping and creating dataframe
+from datetime import datetime
+# making some blank files 
+q1=[]
+q2=[]
+for firstrow in dfs.collect():
+  
+  first=(firstrow[0])
+  timestampStr = first.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+  #print(timestampStr)
+  
+  for secondrow in dfs.collect():
+    second=secondrow[0]
+    #print("second:", first , secondrow[0])
+    q1.append(first)
+    q2.append(second)
+    
+    
+  #datas.append(timestampStr)
+  #print(type(timestampStr))
+  
+
+# COMMAND ----------
+
+new_data ={"from": q1
+       ,"to": q2}
+df = pd.DataFrame(new_data)
+dataframe = sc.createDataFrame(df)
+
+dataframe.show()
+
+# COMMAND ----------
+
+ff=dfs.cache()
+
+ff.show()
+ff.collect()
+
+# COMMAND ----------
+
+zz=[]
+rdd =dfs.rdd
+def func(data):
+  print(data)
+usr=rdd.foreach(func)  
+usr.collect()
+#rdd.partitionBy(10).map(lambda x: x).take(4)
+
+#rdd.map(lambda x: x[0]).take(1)[0]
+
+# COMMAND ----------
+
+dfs.collect().cache()
+for i in dfs.collect():
+  print(i)
+
+# COMMAND ----------
+
+from pyspark.sql.functions import countDistinct, lit
+from datetime import datetime
+# making some blank files 
+q1=[]
+q2=[]
+counted=[]
+for firstrow in dfs.collect():
+  
+  first=(firstrow[0])
+  timestampStr = first.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+  #print(timestampStr)
+  
+  for secondrow in dfs.collect():
+    second=secondrow[0]
+    #print("second:", a , secondrow[0])
+    q1.append(first)
+    q2.append(second)
+    
+    #dfs.filter(dfs['date'] == second).show()
+    #dfs.filter(dfs["date"].lt(lit(first))).show()
+    #dfs.select(dfs['user', 'date']).filter(dfs['date'] >= lit(first)).filter(dfs['date'] <= lit(second)).show()
+    
+    
+    count=dfs.filter( (dfs['date'] >= first) & (dfs['date'] <= second) ).select(countDistinct(dfs['user']))
+    [counted.append(val) for val in count.collect()]
+    #print(type(count))
+    #dfs.select(countDistinct(dfs['user'])).show()
+    
+  #datas.append(timestampStr)
+  #print(type(timestampStr))
+  
+
+# COMMAND ----------
+
+
+#count=ff.filter( (dfs['date'] >= dataframe['first']) & (dfs['date'] <= second) ).select(countDistinct(dfs['user']))
+
+# COMMAND ----------
+
+print(counted)
+
+# COMMAND ----------
+
+new_data ={"from": q1
+       ,"to": q2,
+          "count": counted}
+df1 = pd.DataFrame(new_data)
+dataframe = spark.createDataFrame(df1)
+
+dataframe.show()
+
+# COMMAND ----------
+
+dataframe.select(dataframe['count']).take(50)
+
+# COMMAND ----------
+
+dfs.cache()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import countDistinct, lit
+from datetime import datetime
+# making some blank files 
+q1=[]
+q2=[]
+counted=[]
+for firstrow in dfs.select('date').collect():
+  
+  first=(firstrow[0])
+  timestampStr = first.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+  #print(timestampStr)
+  
+  for secondrow in dfs.take(100):
+    second=secondrow[0]
+    #print("second:", a , secondrow[0])
+    q1.append(first)
+    q2.append(second)
+    
+    #dfs.filter(dfs['date'] == second).show()
+    #dfs.filter(dfs["date"].lt(lit(first))).show()
+    #dfs.select(dfs['user', 'date']).filter(dfs['date'] >= lit(first)).filter(dfs['date'] <= lit(second)).show()
+    
+    
+    count=dfs.filter( (dfs['date'] >= first) & (dfs['date'] <= second) ).select(countDistinct(dfs['user']))
+    [counted.append(val) for val in count.collect()]
+    #print(type(count))
+    #dfs.select(countDistinct(dfs['user'])).show()
+    
+  #datas.append(timestampStr)
+  #print(type(timestampStr))
+  
+
+# COMMAND ----------
+
+for i in dfs.take(15):
+  print(i)
+
+# COMMAND ----------
+
+[i for i in dfs.take(15)]
+
+# COMMAND ----------
+
+from pyspark.sql.functions import min, max
+sortDate=dfs.select(min(dfs['date']).alias("maxDate"), max(dfs['date']).alias("minDate"))
+
+# COMMAND ----------
+
+from pyspark.sql.functions import to_date
+df2 = sortDate.withColumn("date", to_date(sortDate["minDate"]))
+df2.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import count
+a=dfs.select(count(dfs['date'])).collect()[0]
+
+print(int(a))
+
+# COMMAND ----------
+
+import pandas as pd
+for i in df2.select(df2['minDate']).collect():
+  print(i)
+  datelist = pd.date_range(start=i, periods=a, freq='D')
+
+# COMMAND ----------
+
+import pyspark.sql.functions as f
+
+
+'''sortDate.withColumn("monthsDiff", f.months_between("maxDate", "minDate"))\
+    .withColumn("repeat", f.expr("split(repeat(',', monthsDiff), ',')"))\
+    .select("*", f.posexplode("repeat").alias("date", "val"))\
+    .withColumn("date", f.expr("add_months(minDate, date)"))\
+    .select('date')\
+    .show(n=50)
+  '''
+
+# COMMAND ----------
+
+dfs.createOrReplaceTempView("hey")
+
+# COMMAND ----------
+
+dfs.collect()
+
+# COMMAND ----------
+
+dfs.select('date').collect()
+
+# COMMAND ----------
+
+dfs.select(dfs['date']).collect()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import countDistinct, lit
+from datetime import datetime
+# making some blank files 
+q1=[]
+q2=[]
+counted=[]
+for firstrow in dfs.select(dfs['date']).collect():
+  
+  first=(firstrow[0])
+  #timestampStr = first.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+  #print(timestampStr)
+  
+  for secondrow in dfs.select(dfs['date']).collect():
+    second=secondrow[0]
+    #print("second:", a , secondrow[0])
+    q1.append(first)
+    q2.append(second)
+    
+    #dfs.filter(dfs['date'] == second).show()
+    #dfs.filter(dfs["date"].lt(lit(first))).show()
+    #dfs.select(dfs['user', 'date']).filter(dfs['date'] >= lit(first)).filter(dfs['date'] <= lit(second)).show()
+    
+    
+    count=dfs.filter( (dfs['date'] >= first) & (dfs['date'] <= second) ).select(countDistinct(dfs['user']).alias("distinct"))
+    #[counted.append(val) for val in count.select(count['distinct']).collect()]
+    #print(type(count))
+    #dfs.select(countDistinct(dfs['user'])).show()
+    
+  #datas.append(timestampStr)
+  #print(type(timestampStr))
+  
+
+# COMMAND ----------
+
+from pyspark.sql import SparkSession
+sc = SparkSession.builder.appName
+Hc
+= HiveContext(sc)
+
+# COMMAND ----------
+
+dfs.show()
+
+# COMMAND ----------
+
+dfs.createOrReplaceTempView("sqltable")
+
+# COMMAND ----------
+
+sqlContext.sql
+
+# COMMAND ----------
+
+# MAGIC %sql select  * from sqltable;
+# MAGIC select count(distinct(user)) from sqltable where date between '2019-01-01' and DATEADD(day,20,date);
+
+# COMMAND ----------
+
+# MAGIC %sql select min(date), DATE_SUB(date,INTERVAL 1 DAY) AS newDate from sqltable;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT date
+# MAGIC FROM sqltable
+# MAGIC WHERE date
+# MAGIC BETWEEN '2019-01-01' AND '2019-01-03';
+
+# COMMAND ----------
+
+  
+sqlContext.sql("select * from sqltable")
+
+# COMMAND ----------
+
+def func(n):
+  for i in n :
+    print(i)
+    #print("hey")
+    for j in n:
+      print(i ,"*", j)
+     # print (i,"&",j)
+
+result = map(func, dfs.select(dfs['date']).collect())
+print(list(result))
+
+# COMMAND ----------
+
+dataframe.show()
+
+# COMMAND ----------
+
+import functools 
+from functools import reduce  # For Python 3.x
+from pyspark.sql import DataFrame
+dfs.unionAll(dfs)
+
+# COMMAND ----------
+
+# MAGIC %sql  SELECT DATEADD(year, 1, '2017/08/25') AS DateAdd ; 
+
+# COMMAND ----------
+
+from pyspark.sql.functions import to_date, date_add
+import pyspark.sql.functions as f
+dfs.withColumn("date", f.date_add(dfs['date'],2)).show()
+
+# COMMAND ----------
+
+dfs.select("date").withColumn("date", f.date_add(dfs['date'],2)).show()
+
+# COMMAND ----------
+
+dfs.withColumn(("dates", f.date_add(dfs['date'],1)).show()
+
+# COMMAND ----------
+
+dfs['date'].f.map(lambda x: x*2)
+
+# COMMAND ----------
+
+
+dfs.apply(lambda x: x+1 )
+
+# COMMAND ----------
+
+# DBTITLE 1,min and max dataframe
+from pyspark.sql.functions import min, max, datediff
+sortDate=dfs.select(min(dfs['date']).alias("minDate"), max(dfs['date']).alias("maxDate"))
+sortDate.show()
+
+# COMMAND ----------
+
+diffdaysDF = sortDate.withColumn("diffDays", datediff('maxDate', 'minDate'))
+diffdaysDF.show()
+
+# COMMAND ----------
+
+import pyspark.sql.functions as f
+
+diffdaysDF.withColumn("repeat", f.expr("split(repeat(',', diffDays), ',')"))\
+    .select("*", f.posexplode("repeat").alias("txnDt", "val"))\
+    .drop("repeat", "val", "diffDays")\
+   .withColumn("txnDt", f.expr("date_add(minDate, txnDt)")).show()
+
+# COMMAND ----------
+
+la=dfs.count()
+for i in la:
+  dfs.select(dfs['date'][i])
+
+# COMMAND ----------
+
+dfs.select(dfs['date']).show(1)
+
+# COMMAND ----------
+
+dfs.show()
+
+# COMMAND ----------
+
+for i in range(0,21):
+  
+  fordfs=dfs.withColumn("dates", f.date_add(dfs['date'],i))
+  unionds=fordfs.union(fordfs)
+
+  unionds.show(50)
+
+
+# COMMAND ----------
+
+spark.udf.register("functionss", mapfunc1)
+
+TypeError: 'module' object is not callable
+  
+  
+  
+  (dfs.withColumn(("dates", f.date_add(x,1))))
+
+# COMMAND ----------
+
+import pyspark.sql.functions as f
+from pyspark.sql.functions import udf,to_utc_timestamp
+from pyspark.sql.types import  DateType, StringType
+
+def mapfunc1(x):
+  #zz =   dfs.withColumn(("dates", to_utc_timestamp(f.date_add(x,1))))
+  return x
+
+# COMMAND ----------
+
+newDate = f.udf(mapfunc1, DateType())
+dfs.select("date", newDate("date")).show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import  coalesce
+pivotdf=dfs.groupBy("date").pivot("date").agg({"date":"first"})
+pivotdf.show(4)
+#print(c)
+
+# COMMAND ----------
+
+dfs.agg(dfs['date']).show()
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
+newlist=pivotdf.columns
+newlist.pop(0)
+newlist
+
+# COMMAND ----------
+
+len(tolist)
+
+# COMMAND ----------
+
+#print(pivotdf.columns)
+fromlist=[]
+tolist=[]
+for i in newlist:
+  #print(i)
+  for j in newlist:
+    
+    fromlist.append(i)
+
+    tolist.append(j)
+    
+
+# COMMAND ----------
+
+# DBTITLE 1,creating new lasted updated dataframe
+from pyspark.sql.types import DateType, StructType, StructField
+
+schema = StructType([StructField('from', DateType(), True),
+                     StructField('to', DateType(), True)])
+
+datesdata = {"from": fromlist,
+              "to": tolist}
+dfPanda=pd.DataFrame(datesdata)
+dfPanda['fromDate']= pd.to_datetime(dfPanda['from'])
+dfPanda['toDate'] = pd.to_datetime(dfPanda['to'])
+
+
+dfspark = sc.createDataFrame(dfPanda)
+
+
+# COMMAND ----------
+
+from pyspark.sql.types import IntegerType, StringType
+from pyspark.sql.functions import unix_timestamp, from_unixtime
+
+
+dfspark.select('fromDate', from_unixtime(unix_timestamp('fromDate', 'MM/dd/yyy')).alias('date')).show()
+
+# COMMAND ----------
+
+dfspark.printSchema()
+
+# COMMAND ----------
+
+dfspark.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import * 
+joineddf= dfspark.join(dfs, dfspark['toDate'] ==  dfs['date'])
+joineddf=joineddf.drop('to','from', 'date')
+
+# COMMAND ----------
+
+joineddf.show()
+
+# COMMAND ----------
+
+joineddf.createOrReplaceTempView("joinsql")
+
+# COMMAND ----------
+
+# MAGIC %sql 
+# MAGIC select count(user) from joinsql group by fromDate
+# MAGIC having  toDate == fromDate;
+
+# COMMAND ----------
+
+joineddf.groupBy(joineddf['from']).filter(joineddf["to"] >)
+
+# COMMAND ----------
+
+joineddf.groupBy(joineddf['from'],joineddf['to']).count().show()
+
+# COMMAND ----------
+
+dfs.show()
+
+# COMMAND ----------
+
+joineddf.createOrReplaceTempView("joinsql")
+
+# COMMAND ----------
+
+
