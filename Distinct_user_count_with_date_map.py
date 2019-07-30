@@ -1,7 +1,7 @@
 # Databricks notebook source
 # DBTITLE 1,CREATING SparkSession and pandas instance
 
-# Notebook Published - file:///home/tushar/Downloads/Distinct_user_count_with_date_map.py 
+# Notebook Published - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/524104771162516/5764242340617371/latest.html 
 import pandas as pd
 from pyspark.sql import SparkSession
 sc = SparkSession.builder.appName("distinct user count").getOrCreate()
