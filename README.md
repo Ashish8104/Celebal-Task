@@ -15,5 +15,8 @@ App Status for total distinct user: https://databricks-prod-cloudfront.cloud.dat
 Text Delimiter file in pyspark like with Dollar["$"] -  https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/3527025572877450/5764242340617371/latest.html
 
 
+Advertiser lost & added per new year - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/4350418790012348/5764242340617371/latest.html
+
+ 
 
 Learn Scala file : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
