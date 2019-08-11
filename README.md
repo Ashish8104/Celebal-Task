@@ -19,4 +19,5 @@ Advertiser lost & added per new year - https://databricks-prod-cloudfront.cloud.
 
  
 
-Learn Scala file : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
+Learn Scala files : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
+
