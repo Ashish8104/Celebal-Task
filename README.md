@@ -19,9 +19,13 @@ Advertiser lost & added per new year - https://databricks-prod-cloudfront.cloud.
 
  
 
+<<<<<<< HEAD
 Learn Scala file : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
 
 
 Hive Internal & External Table: https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/750140149301887/5764242340617371/latest.html
 
+=======
+Learn Scala files : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
+>>>>>>> 14041ee03ef83a212e48ff6fd318c5a7a10f6359
 
