@@ -16,11 +16,18 @@ Text Delimiter file in pyspark like with Dollar["$"] -  https://databricks-prod-
 
 
 Advertiser lost & added per new year - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/4350418790012348/5764242340617371/latest.html
+----------------
+# SQLZOO Implementation in Scala/python Spark:
 
 SQLZOO Chapter 1&2 - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/1227106145213404/5764242340617371/latest.html
 
 SQLZOO CHAPTER 3 - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/3882546477227230/5764242340617371/latest.html
 
+SQLZOO CHAPTER 4 - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/3882546477227250/5764242340617371/latest.html
+
+SQLZOO CHAPTER 5 - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/1832172108127233/5764242340617371/latest.html
+
+----------------
 <<<<<<< HEAD
 Learn Scala file : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
 
