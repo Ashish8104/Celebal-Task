@@ -27,6 +27,8 @@ SQLZOO CHAPTER 4 - https://databricks-prod-cloudfront.cloud.databricks.com/publi
 
 SQLZOO CHAPTER 5 - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/1832172108127233/5764242340617371/latest.html
 
+SQLZOO CHAPTER 6 - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/3859837373276120/5764242340617371/latest.html
+
 ----------------
 <<<<<<< HEAD
 Learn Scala file : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
