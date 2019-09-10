@@ -32,6 +32,10 @@ SQLZOO CHAPTER 6 - https://databricks-prod-cloudfront.cloud.databricks.com/publi
 SQLZOO CHAPTER 8 (NULL USE CASES) - https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/1977730164728891/5764242340617371/latest.html
 
 ----------------
+
+# Scala Program and task
+GroupBy Pandas Iteration & dataframe in Spark: https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/931328135249323/2185313371049953/5764242340617371/latest.html
+
 <<<<<<< HEAD
 Learn Scala file : https://books.google.co.in/books?id=QOzSBQAAQBAJ&lpg=PP1&pg=PP1#v=onepage&q&f=true
 
