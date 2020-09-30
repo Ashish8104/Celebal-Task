@@ -23,3 +23,7 @@ condition_7.groupBy($"continent").agg(count($"name")).show()
 // THIS IS FOR PART 8 
 val condition_8 = df.groupBy($"continent").agg( (sum($"population") < 100000000).alias("population_greater") ).drop("population_greater")
 condition_8.show()
+
+df.show()
+print("abc")
+print("Error update")
