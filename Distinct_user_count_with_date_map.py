@@ -15,6 +15,7 @@ for i in range(1,21):
   dates= '01/'+str(i)+'/2019'
   list1.append(dates)
   print(dates)
+  print("Hello"+dates)
 
 dateList=['a','b','c','d','a','b','d','e','g','t','a','b','d','c','t','j','k','a','m','l']
 
@@ -50,6 +51,7 @@ def func(n):
     #print("hey")
     for j in n:
       print(i ,"*", j)
+      print("Hello")
      # print (i,"&",j)
 
 result = map(func, dfs.select(dfs['date']).collect())
